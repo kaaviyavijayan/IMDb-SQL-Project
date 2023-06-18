@@ -3,6 +3,7 @@
 CREATE DATABASE IF NOT EXISTS IMDB;
 USE IMDB;
 
+----------------------------------------------------------------------------------------------------------------
 
 -- Creating Table named directors:
 
@@ -17,6 +18,7 @@ CREATE TABLE directors
 PRIMARY KEY (uid)
 );
   
+--------------------------------------------------------------------------------------------------  
   
   
 -- Creating table named movies:
@@ -39,7 +41,9 @@ CREATE TABLE movies
     director_id INT
 );
    
-   
+ 
+---------------------------------------------------------------------------------------------------------------------
+ 
    
 -- Importing the .csv Datasets from the directory path 
  
@@ -58,11 +62,15 @@ FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
 
+-----------------------------------------------------------------------------------------------------------------------------
+
 
 SELECT * FROM movies;
 
 SELECT * FROM directors;
 
+
+-----------------------------------------------------------------------------------------------------------------------------
 
 
 -- How many movies were released each year?
@@ -72,6 +80,8 @@ GROUP BY year
 ORDER BY year DESC;
 
 
+------------------------------------------------------------------------------------------------------------------------------
+
 
 -- How many movies were released in each month of the year?
 
@@ -79,6 +89,8 @@ SELECT MONTH(release_date) AS month, COUNT(*) AS movie_count FROM movies
 GROUP BY month
 ORDER BY month;
 
+
+------------------------------------------------------------------------------------------------------------------------------
 
 
 -- Which movies have the most user votes?
@@ -88,6 +100,8 @@ ORDER BY vote_count DESC
 LIMIT 5;
 
 
+----------------------------------------------------------------------------------------------------------------------------------
+
 
 -- What are the top 5 movies with the highest revenue?
 
@@ -95,6 +109,8 @@ SELECT title, revenue FROM movies
 ORDER BY revenue DESC
 LIMIT 5;
 
+
+-------------------------------------------------------------------------------------------------------------------------------------
 
 
 -- Who are the top 5 movie directors with the highest revenue?
@@ -106,6 +122,8 @@ ORDER BY movies.revenue DESC
 LIMIT 5;
 
 
+-------------------------------------------------------------------------------------------------------------------------
+
 
 -- How many movies were directed by each director?
 
@@ -115,6 +133,8 @@ GROUP BY m.director_id
 ORDER BY movie_count DESC;
 
 
+----------------------------------------------------------------------------------------------------------------------------
+
 
 -- How many movies were released in each year for each director?
 
@@ -123,6 +143,8 @@ JOIN directors d ON d.id = m.director_id
 GROUP BY Year, d.name
 ORDER BY Year, d.name;
 
+
+-----------------------------------------------------------------------------------------------------------------------
 
 -- How many male and female directors are there in the dataset?
 
@@ -140,11 +162,16 @@ SELECT Gender, SUM(count) AS directors_count FROM count_of_gender
 GROUP BY Gender;
 
 
+----------------------------------------------------------------------------------------------------------------------
+
 
 -- List the budget for the movie and its profit/loss from box_office collection.
 
 SELECT title, budget, revenue - budget AS profit FROM movies
 ORDER BY profit DESC;
+
+
+----------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -154,6 +181,7 @@ SELECT * FROM movies
 ORDER BY popularity DESC
 LIMIT 3;
 
+-----------------------------------------------------------------------------------------------------------------------
 
 
 -- Find all directors which contains the name Steven.
@@ -161,6 +189,7 @@ LIMIT 3;
 SELECT name from directors
 WHERE name LIKE '%Steven%';
 
+----------------------------------------------------------------------------------------------------------------------
 
 
 -- Create a stored procedure to display the movie's overview on users input.
@@ -176,6 +205,8 @@ DELIMITER ;
 call imdb.movie_overview('Avatar');
 
 
+-----------------------------------------------------------------------------------------------------------------
+
 
 -- Create a View for displaying the movies tagline.
 
@@ -185,6 +216,8 @@ SELECT title, tagline FROM movies;
 SELECT * FROM imdb.movies_tagline_summary;
 
 
+-----------------------------------------------------------------------------------------------------------------------
+
 
 -- Give the row number for the movies title and directors based on the popularity.
 
@@ -192,8 +225,6 @@ SELECT name, title, popularity,
        ROW_NUMBER() OVER(ORDER BY popularity DESC) AS row_num
 FROM movies m
 JOIN directors d ON d.id = m.director_id;
-
-
 
 -- OR using Window Function
 
@@ -203,6 +234,8 @@ FROM movies m
 JOIN directors d ON d.id = m.director_id
 WINDOW w as (ORDER BY popularity DESC);
 
+
+-----------------------------------------------------------------------------------------------------------------------
 
 
 -- Rank the James Cameron Movie names based on their budgets.
